@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\CacheLatestPost;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,7 +16,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->job(CacheLatestPost::class)->hourly()->environments(['staging', 'production']);
+
+        $schedule->job(CacheLatestPost::class)->everyMinute()->environments(['local', 'testing']);
     }
 
     /**
